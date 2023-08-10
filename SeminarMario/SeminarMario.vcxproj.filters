@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Practice">
+      <UniqueIdentifier>{fa13f3d5-7199-4a36-a323-b72e0c5a39a5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ScoreEntity.h" />
+    <ClInclude Include="LifeEntity.h" />
+    <ClInclude Include="SlimeEntity.h" />
+    <ClInclude Include="EntitiesPool.h" />
+    <ClInclude Include="HeroEntity.h" />
+    <ClInclude Include="Observer.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="Physics.h" />
+    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Entities.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ScoreEntity.cpp" />
+    <ClCompile Include="HeroEntity.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="EntitiesPool.cpp" />
+    <ClCompile Include="SlimeEntity.cpp" />
+    <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="LifeEntity.cpp" />
+    <ClCompile Include="Observer.cpp" />
+    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Entities.cpp" />
+    <ClCompile Include="pracrice.cpp" />
+  </ItemGroup>
+</Project>
