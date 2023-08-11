@@ -51,7 +51,7 @@ cv::Mat LivesGraphics::getCollisionMask()
 
 void LivesGraphics::reset(int code) {
 
-    _livesCount = code;
+    _livesCount += code;
 }
 
 bool LivesGraphics::update()
@@ -124,7 +124,7 @@ void ScoresGraphics::draw(cv::Mat& canvas, cv::Point const& topLeft)
 
 void ScoresGraphics::reset(int code)
 {
-    _score = code;
+    _score += code;
 }
 
 bool ScoresGraphics::update()

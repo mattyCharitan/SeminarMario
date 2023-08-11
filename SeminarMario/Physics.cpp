@@ -124,7 +124,7 @@ cv::Mat const& NonCollidingPhysicsDecorator::getCollisionMask() const
 
 bool NonCollidingPhysicsDecorator::checkCollision(std::shared_ptr<IPhysicsComponent> const& other) const
 {
-	return _base->checkCollision(other);
+	return false;
 }
 
 cv::Point const& NonCollidingPhysicsDecorator::getTL() const

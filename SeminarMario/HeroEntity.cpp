@@ -6,6 +6,7 @@
 #include <filesystem>
 #include "EntitiesPool.h"
 #include "collisableAction.h"
+#include "CollisnableActionDecorator.h"
 
 using namespace cv;
 using namespace std;
@@ -63,18 +64,23 @@ EntityStatePtr createHeroState(
 	default:
 		throw std::exception("Unknown physics state!");
 	}
+	if (_entitiesPool != nullptr) {
+		IPhysicsComponentPtr BoundedphysicsPtr(new BoundedPhysicsDecorator(physicsPtr));
+		return make_shared<CollisnableActionDecorator>(graphicsPtr, BoundedphysicsPtr, _entitiesPool);
+	}
 	IPhysicsComponentPtr BoundedphysicsPtr(new BoundedPhysicsDecorator(physicsPtr));
 	return make_shared<EntityState>(graphicsPtr, BoundedphysicsPtr);
 }
-EntityPtr createHero(std::string const & rootAnimationsFolder)
+EntityPtr createHero(std::string const & rootAnimationsFolder, EntitiesPool* enemiesPool, EntityPtr life)
 {
-	
+	EntitiesPool* _enemiesPool = enemiesPool;
+	EntityPtr _life = life;
 	fs::path root = rootAnimationsFolder;
 	auto idleFolder = root / "idle";
 
 	auto idle = createHeroState(root / "idle", HeroStates::HERO_IDLE);
-	auto runRight = createHeroState(root / "runRight", HeroStates::HERO_RUN_RIGHT);
-	auto jump = createHeroState(root / "jump", HeroStates::HERO_JUMP);
+	auto runRight = createHeroState(root / "runRight", HeroStates::HERO_RUN_RIGHT, _enemiesPool);
+	auto jump = createHeroState(root / "jump", HeroStates::HERO_JUMP, _enemiesPool);
 	auto duck = createHeroState(root / "duckDown", HeroStates::HERO_DUCK);
 	auto stayDuck = createHeroState(root / "duckStay", HeroStates::HERO_STAY_DUCK);
 	auto standAfterDuck = createHeroState(root / "standAfterDuck", HeroStates::HERO_STAND_AFTER_DUCK);
@@ -101,6 +107,8 @@ EntityPtr createHero(std::string const & rootAnimationsFolder)
 	EntityPtr hero(new Entity(idle));
 
 	idle->Register(hero);
+	runRight->Register(life);
+	jump->Register(life);
 	runRight->Register(hero);
 	jump->Register(hero);
 	duck->Register(hero);

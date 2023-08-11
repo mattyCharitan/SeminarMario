@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="CollisnableActionDecorator.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Entities.h" />
     <ClInclude Include="EntitiesPool.h" />
@@ -26,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="CollisnableActionDecorator.cpp" />
     <ClCompile Include="Entities.cpp" />
     <ClCompile Include="EntitiesPool.cpp" />
     <ClCompile Include="Graphics.cpp" />

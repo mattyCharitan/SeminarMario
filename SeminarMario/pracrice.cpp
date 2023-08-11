@@ -18,9 +18,10 @@ int main()
 	auto life = Createlives(R"(../Animations/hearts)");
 	auto score = CreateScore();
 	auto slime = enemiesPool.getNext();
+	
 	slime->reset(Point(background.size().width * 2 / 3, background.size().height * 3.80 / 5));
 	
-	EntityPtr hero = createHero(R"(../Animations/Hero)");
+	EntityPtr hero = createHero(R"(../Animations/Hero)", &enemiesPool, life);
 	hero->reset(Point(0, background.size().height * 1.89 / 3));
 	
 
@@ -38,11 +39,12 @@ int main()
 		life->draw(canvas);
 		score->draw(canvas);
 		hero->draw(canvas);
+		//life->reset(Point(0, 0));
 
 
 		imshow("test", canvas);
 	}
-
+	
 	return 0;
 }
 

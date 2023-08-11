@@ -1,13 +1,11 @@
 #include "Entities.h"
-//#include "Graphics.h"
-//#include "Physics.h"
-//#include "Animation.h"
 #include "Animation.h"
 #include "Config.h"
 
 #include <memory>
 #include "Graphics.h"
 #include "Physics.h"
+#include "CollisnableActionDecorator.h"
 using namespace std;
 using namespace cv;
 
@@ -20,11 +18,9 @@ void EntityState::update()
 {
 	bool graphicsFinished = _graphicsPtr->update();
 	bool physicsFinished = _physicsPtr->update(_graphicsPtr->getCollisionMask());
-
 	if (physicsFinished)
 		Notify(Event{EventSenders::SENDER_ENTITY_STATE, EventTypes::EVENT_PHYSICS, EventCodes::ENTITY_PHYSICS_FINISHED});
 	if (graphicsFinished) {
-		// @4 TODO.
 		Notify(Event{ EventSenders::SENDER_ENTITY_STATE, EventTypes::EVENT_GRAPHICS, EventCodes::ENTITY_FINISHED_ANIMATION});
 	}
 }
@@ -48,10 +44,19 @@ IPhysicsComponentPtr const& EntityState::getPhysics() const
 	return _physicsPtr;
 }
 
-void EntityState::reset(cv::Point const& TL)
+void EntityState::reset(cv::Point const& TL,bool plus)
 {
-	_graphicsPtr->reset();
-	_physicsPtr->reset(TL);
+	if (!plus) {
+		_graphicsPtr->reset(-1);
+		_physicsPtr->reset(TL);
+
+	}
+	else{
+		_graphicsPtr->reset();
+		_physicsPtr->reset(TL);
+	}
+	
+
 }
 
 void EntityState::draw(cv::Mat & canvas)
@@ -75,20 +80,40 @@ EntityStatePtr Entity::getState()
 void Entity::onNotify(Event const& e)
 {
 	if (e.sender == EventSenders::SENDER_TIMER
-		&&
-		e.type == EventTypes::EVENT_TIMER
-		&&
-		e.code == EventCodes::TIME_TICK)
+		&& e.type == EventTypes::EVENT_TIMER
+		&& e.code == EventCodes::TIME_TICK)
 	{
+		if (seconds >= 45 && !_isCollidable) {
+			collidable();
+		}
+		seconds++;
 		_state->update();
+		
+
 	}
-	
-	auto newStateCandidate = _state->tryModifyState(e);
-	
-	if (newStateCandidate)
+	else if (e.sender == EventSenders::SENDER_ENTITY_STATE
+		&& e.type == EventTypes::EVENT_PHYSICS
+		&& e.code == EventCodes::COLLISION_WITH_ENEMY)
 	{
-		newStateCandidate->reset(_state->getPhysics()->getTL());
-		_state = newStateCandidate;
+		
+		CollisnableActionDecorator* check = dynamic_cast<CollisnableActionDecorator*>(this);
+
+		if (!check) {
+			nonCollidable();
+			_state->reset(_state->getPhysics()->getTL(), false);
+		}
+		
+		
+	}
+	else
+	{
+		auto newStateCandidate = _state->tryModifyState(e);
+
+		if (newStateCandidate)
+		{
+			newStateCandidate->reset(_state->getPhysics()->getTL());
+			_state = newStateCandidate;
+		}
 	}
 }
 
@@ -96,6 +121,40 @@ void Entity::reset(cv::Point const& TL)
 {
 	_state->reset(TL);
 }
+
+
+
+void Entity::nonCollidable()
+{
+	_isCollidable = false;
+	seconds = 0;
+
+	if (!_originalPhysicsPtr) {
+		_originalPhysicsPtr = _state->_physicsPtr; // Store the original physics component
+	}
+
+	IPhysicsComponentPtr original = _state->_physicsPtr;
+	_state->_physicsPtr = make_shared<NonCollidingPhysicsDecorator>(original);
+}
+
+
+void Entity::collidable()
+{
+	_isCollidable = true;
+	seconds = 0;
+
+	
+	if (_originalPhysicsPtr) {
+		_state->_physicsPtr = _originalPhysicsPtr;
+		_originalPhysicsPtr.reset(); 
+	}
+}
+
+
+
+
+
+
 
 void Entity::draw(cv::Mat& canvas)
 {

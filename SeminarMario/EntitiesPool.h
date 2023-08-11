@@ -11,6 +11,7 @@ private:
 	std::vector<EntityPtr> _pool;
 	std::vector<bool> _isInUse;
 
+
 public:
 	EntitiesPool();
 

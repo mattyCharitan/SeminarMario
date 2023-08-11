@@ -3,4 +3,4 @@
 #include "Entities.h"
 
 
-EntityPtr createHero(std::string const& rootAnimationsFolder);
+EntityPtr createHero(std::string const& rootAnimationsFolder, EntitiesPool* enemiesPool, EntityPtr life);

@@ -18,6 +18,7 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Entities.h" />
+    <ClInclude Include="CollisnableActionDecorator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ScoreEntity.cpp" />
@@ -32,5 +33,6 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Entities.cpp" />
     <ClCompile Include="pracrice.cpp" />
+    <ClCompile Include="CollisnableActionDecorator.cpp" />
   </ItemGroup>
 </Project>
