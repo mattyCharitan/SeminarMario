@@ -36,11 +36,12 @@ class Entity : public IObserver
 protected:
 	int seconds = 0;
 	bool _isCollidable = true;
+	bool isLife;
 	IPhysicsComponentPtr _originalPhysicsPtr;
 	EntityStatePtr _state;
 
 public:
-	Entity(EntityStatePtr state);
+	Entity(EntityStatePtr state ,bool life = false);
 	virtual EntityStatePtr getState();
 	virtual void onNotify(Event const& e) override;
 	virtual void reset(cv::Point const& TL);

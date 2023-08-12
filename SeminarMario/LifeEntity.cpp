@@ -16,6 +16,6 @@ EntityStatePtr CreatelivesState(std::string const& animationFolder)
 EntityPtr Createlives(std::string const& animationFolder)
 {
 	auto life_state = CreatelivesState(animationFolder);
-	EntityPtr life(new Entity(life_state));
+	EntityPtr life(new Entity(life_state, true));
 	return life;
 }

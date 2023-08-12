@@ -27,6 +27,7 @@ int main()
 
 	Timer timer(100);
 	timer.Register(slime);
+	timer.Register(life);
 	timer.Register(hero);
 
 	bool isToExit = false;

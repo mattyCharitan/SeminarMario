@@ -67,8 +67,8 @@ void EntityState::draw(cv::Mat & canvas)
 
 ////////////////////////////////////////////////////////
 
-Entity::Entity(EntityStatePtr state)
-	:_state(state)
+Entity::Entity(EntityStatePtr state, bool life)
+	:_state(state), isLife(life)
 {
 }
 
@@ -84,7 +84,7 @@ void Entity::onNotify(Event const& e)
 		&& e.code == EventCodes::TIME_TICK)
 	{
 		if (seconds >= 45 && !_isCollidable) {
-			collidable();
+			_isCollidable = true;
 		}
 		seconds++;
 		_state->update();
@@ -93,13 +93,13 @@ void Entity::onNotify(Event const& e)
 	}
 	else if (e.sender == EventSenders::SENDER_ENTITY_STATE
 		&& e.type == EventTypes::EVENT_PHYSICS
-		&& e.code == EventCodes::COLLISION_WITH_ENEMY)
+		&& e.code == EventCodes::COLLISION_WITH_ENEMY && _isCollidable)
 	{
 		
-		CollisnableActionDecorator* check = dynamic_cast<CollisnableActionDecorator*>(this);
 
-		if (!check) {
-			nonCollidable();
+		if (isLife) {
+			_isCollidable = false;
+			seconds = 0;
 			_state->reset(_state->getPhysics()->getTL(), false);
 		}
 		
