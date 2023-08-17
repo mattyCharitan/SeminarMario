@@ -10,5 +10,6 @@ This is a simple Mario clone built using C++ that follows best programming pract
 - Stop: Press the 'a' to stop
 - Shoot: Press the 'F' key to make Mario shoot apples to eliminate enemies.
 - Quit: Press the 'Esc' key at any time to exit the game.
+- 
 
 
